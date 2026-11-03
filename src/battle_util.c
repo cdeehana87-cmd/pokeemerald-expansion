@@ -1,4 +1,5 @@
 #include "global.h"
+#include "attribute_points.h"
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_arena.h"
@@ -330,7 +331,7 @@ static s32 CalcBeatUpDamage(struct DamageContext *ctx)
     u32 partyIndex = gBattleStruct->beatUpSpecies[gBattleStruct->beatUpSlot++];
     struct Pokemon *party = GetBattlerParty(ctx->battlerAtk);
     enum Species species = GetMonData(&party[partyIndex], MON_DATA_SPECIES);
-    u32 levelFactor = GetMonData(&party[partyIndex], MON_DATA_LEVEL) * 2 / 5 + 2;
+    u32 levelFactor = ATTR_REF_LEVEL * 2 / 5 + 2;
     s32 dmg = GetSpeciesBaseAttack(species);
 
     dmg *= GetMovePower(ctx->move);
@@ -7279,7 +7280,7 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
 // base damage formula before adding any modifiers
 static inline s32 CalculateBaseDamage(u32 power, u32 userFinalAttack, u32 level, u32 targetFinalDefense)
 {
-    return power * userFinalAttack * (2 * level / 5 + 2) / targetFinalDefense / 50 + 2;
+    return power * userFinalAttack * (2 * ATTR_REF_LEVEL / 5 + 2) / targetFinalDefense / 50 + 2;
 }
 
 static inline uq4_12_t GetTargetDamageModifier(struct DamageContext *ctx)
@@ -9719,7 +9720,7 @@ void SetShellSideArmCategory(void)
             if (targetDefStat == 0)
                 targetDefStat = 1;
 
-            physical = ((((2 * gBattleMons[battlerAtk].level / 5 + 2) * power * attackerAtkStat) / targetDefStat) / 50);
+            physical = ((((2 * ATTR_REF_LEVEL / 5 + 2) * power * attackerAtkStat) / targetDefStat) / 50);
 
             targetSpDefStat = gBattleMons[battlerDef].spDefense;
             statStage = gBattleMons[battlerDef].statStages[STAT_SPDEF];
@@ -9728,7 +9729,7 @@ void SetShellSideArmCategory(void)
             if (targetSpDefStat == 0)
                 targetSpDefStat = 1;
 
-            special = ((((2 * gBattleMons[battlerAtk].level / 5 + 2) * power * attackerSpAtkStat) / targetSpDefStat) / 50);
+            special = ((((2 * ATTR_REF_LEVEL / 5 + 2) * power * attackerSpAtkStat) / targetSpDefStat) / 50);
 
             if ((physical > special) || (physical == special && RandomPercentage(RNG_SHELL_SIDE_ARM, 50)))
                 gBattleStruct->shellSideArmCategory[battlerAtk][battlerDef] = DAMAGE_CATEGORY_PHYSICAL;

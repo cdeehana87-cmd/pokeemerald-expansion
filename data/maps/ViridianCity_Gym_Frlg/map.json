@@ -204,7 +204,7 @@
       "x": 2,
       "y": 2,
       "elevation": 3,
-      "item": "ITEM_MACHO_BRACE",
+      "item": "ITEM_NUGGET",
       "flag": "FLAG_HIDDEN_ITEM_VIRIDIAN_CITY_GYM_MACHO_BRACE",
       "quantity": 1,
       "underfoot": true

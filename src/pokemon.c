@@ -1,4 +1,5 @@
 #include "global.h"
+#include "attribute_points.h"
 #include "malloc.h"
 #include "apprentice.h"
 #include "battle.h"
@@ -852,6 +853,9 @@ void CreateMon(struct Pokemon *mon, enum Species species, u8 level, u32 personal
     ZeroMonData(mon);
     CreateBoxMon(&mon->box, species, level, personality, trainerId);
     SetMonData(mon, MON_DATA_LEVEL, &level);
+#if ATTR_SEED_ENEMIES
+    SeedAttrPoints(mon, level);
+#endif
     mail = MAIL_NONE;
     SetMonData(mon, MON_DATA_MAIL, &mail);
 }
@@ -1404,8 +1408,9 @@ void CalculateMonStats(struct Pokemon *mon)
             continue;
 
         u8 baseStat = GetSpeciesBaseStat(species, i);
-        s32 n = (((2 * baseStat + iv[i] + ev[i] / 4) * level) / 100) + 5;
+        s32 n = (((2 * baseStat + iv[i]) * ATTR_REF_LEVEL) / 100) + 5;
         n = ModifyStatByNature(nature, n, i);
+        n += GetAttrPoints(mon, i);
         if (B_FRIENDSHIP_BOOST == TRUE)
             n = n + ((n * 10 * friendship) / (MAX_FRIENDSHIP * 100));
         SetMonData(mon, MON_DATA_MAX_HP + i, &n);
@@ -1423,7 +1428,7 @@ void CalculateMonStats(struct Pokemon *mon)
     else
     {
         s32 n = 2 * GetSpeciesBaseHP(species) + iv[STAT_HP];
-        newMaxHP = (((n + ev[STAT_HP] / 4) * level) / 100) + level + 10;
+        newMaxHP = (((n) * ATTR_REF_LEVEL) / 100) + ATTR_REF_LEVEL + 10 + GetAttrPoints(mon, STAT_HP);
     }
 
     gBattleScripting.levelUpHP = newMaxHP - oldMaxHP;
@@ -2604,6 +2609,19 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg)
 
 void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
 {
+    switch (field)
+    {
+    case MON_DATA_HP_EV: case MON_DATA_ATK_EV: case MON_DATA_DEF_EV:
+    case MON_DATA_SPEED_EV: case MON_DATA_SPATK_EV: case MON_DATA_SPDEF_EV:
+    case MON_DATA_COOL: case MON_DATA_BEAUTY: case MON_DATA_CUTE:
+    case MON_DATA_SMART: case MON_DATA_TOUGH: case MON_DATA_SHEEN:
+        if (!gAttrWriteAllowed)
+            return; // these bytes now hold attribute points
+        break;
+    default:
+        break;
+    }
+
     const u8 *data = dataArg;
 
     if (field > MON_DATA_ENCRYPT_SEPARATOR)
@@ -4948,6 +4966,7 @@ s32 CalculateFriendshipBonuses(struct Pokemon *mon, s32 modifier, enum HoldEffec
 
 void MonGainEVs(struct Pokemon *mon, enum Species defeatedSpecies)
 {
+    return; // attribute points replace EV gain
     u8 evs[NUM_STATS];
     u16 evIncrease = 0;
     u16 totalEVs = 0;

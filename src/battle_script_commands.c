@@ -1,4 +1,5 @@
 #include "global.h"
+#include "attribute_points.h"
 #include "battle.h"
 #include "battle_hold_effects.h"
 #include "battle_message.h"
@@ -3998,7 +3999,7 @@ static void Cmd_getexp(void)
                 gBattleScripting.getexpState = 5;
                 gBattleStruct->battlerExpReward = 0;
                 if (B_MAX_LEVEL_EV_GAINS >= GEN_5)
-                    MonGainEVs(&gParties[B_TRAINER_PLAYER][*expMonId], faintedSpecies);
+                    AwardBattlePoints(&gParties[B_TRAINER_PLAYER][*expMonId]);
             }
             else
             {
@@ -4066,7 +4067,7 @@ static void Cmd_getexp(void)
                         gBattleStruct->teamGotExpMsgPrinted = TRUE;
                     }
 
-                    MonGainEVs(&gParties[B_TRAINER_PLAYER][*expMonId], faintedSpecies);
+                    AwardBattlePoints(&gParties[B_TRAINER_PLAYER][*expMonId]);
                 }
                 gBattleScripting.getexpState++;
             }

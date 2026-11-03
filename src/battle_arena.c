@@ -127,12 +127,12 @@ static void (*const sArenaFunctions[])(void) =
 
 static const u16 sShortStreakPrizeItems[] =
 {
-    ITEM_HP_UP,
-    ITEM_PROTEIN,
-    ITEM_IRON,
-    ITEM_CALCIUM,
-    ITEM_CARBOS,
-    ITEM_ZINC,
+    ITEM_NUGGET,
+    ITEM_NUGGET,
+    ITEM_NUGGET,
+    ITEM_NUGGET,
+    ITEM_NUGGET,
+    ITEM_NUGGET,
 };
 
 static const u16 sLongStreakPrizeItems[] =
