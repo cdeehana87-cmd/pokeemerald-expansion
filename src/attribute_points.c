@@ -142,7 +142,7 @@ void AwardBattlePoints(struct Pokemon *mon)
 #endif
 }
 
-bool8 gAttrWriteAllowed = FALSE;
+EWRAM_DATA bool8 gAttrWriteAllowed = FALSE;
 
 void SeedAttrPoints(struct Pokemon *mon, u8 level)
 {
@@ -152,9 +152,9 @@ void SeedAttrPoints(struct Pokemon *mon, u8 level)
         SetAttrPoints(mon, stat, bonus);
 }
 
-bool8 gAttrGainPending = FALSE;
-u8 gAttrGainStat = 0xFF;
-u16 gAttrGainAmount = 0;
+EWRAM_DATA bool8 gAttrGainPending = FALSE;
+EWRAM_DATA u8 gAttrGainStat = 0;
+EWRAM_DATA u16 gAttrGainAmount = 0;
 
 static const u8 sAttrNameHP[]    = _("HP");
 static const u8 sAttrNameAtk[]   = _("ATTACK");
