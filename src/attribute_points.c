@@ -128,10 +128,17 @@ void AwardBattlePoints(struct Pokemon *mon)
     unspent = (unspent > 65535 - roll) ? 65535 : unspent + roll;
     SetUnspentPoints(mon, unspent);
 #if ATTR_PROTOTYPE_AUTOSPEND
-    if (amount != 0)
-        SpendAttrPoint(mon, stat, amount);   // refreshes stats too
+    if (amount != 0 && SpendAttrPoint(mon, stat, amount))
+    {
+        gAttrGainStat = stat;
+        gAttrGainAmount = amount;
+        gAttrGainPending = TRUE;
+    }
 #else
     CalculateMonStats(mon);
+    gAttrGainStat = 0xFF;
+    gAttrGainAmount = roll;
+    gAttrGainPending = TRUE;
 #endif
 }
 
@@ -143,4 +150,21 @@ void SeedAttrPoints(struct Pokemon *mon, u8 level)
     u8 stat;
     for (stat = STAT_HP; stat <= STAT_SPDEF; stat++)
         SetAttrPoints(mon, stat, bonus);
+}
+
+bool8 gAttrGainPending = FALSE;
+u8 gAttrGainStat = 0xFF;
+u16 gAttrGainAmount = 0;
+
+static const u8 sAttrNameHP[]    = _("HP");
+static const u8 sAttrNameAtk[]   = _("ATTACK");
+static const u8 sAttrNameDef[]   = _("DEFENSE");
+static const u8 sAttrNameSpeed[] = _("SPEED");
+static const u8 sAttrNameSpAtk[] = _("SP. ATK");
+static const u8 sAttrNameSpDef[] = _("SP. DEF");
+static const u8 *const sAttrNames[6] = { sAttrNameHP, sAttrNameAtk, sAttrNameDef, sAttrNameSpeed, sAttrNameSpAtk, sAttrNameSpDef };
+
+const u8 *GetAttrName(u8 stat)
+{
+    return sAttrNames[stat > STAT_SPDEF ? 0 : stat];
 }

@@ -27,4 +27,10 @@ extern bool8 gAttrWriteAllowed;
 #define ATTR_SEED_DIVISOR 25
 void SeedAttrPoints(struct Pokemon *mon, u8 level);
 
+// Filled by AwardBattlePoints so the battle script can print a message.
+extern bool8 gAttrGainPending;
+extern u8 gAttrGainStat;       // STAT_* that gained, or 0xFF if the points went to the unspent pool
+extern u16 gAttrGainAmount;
+const u8 *GetAttrName(u8 stat);
+
 #endif

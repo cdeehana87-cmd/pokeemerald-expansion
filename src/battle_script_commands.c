@@ -3985,6 +3985,7 @@ static void Cmd_getexp(void)
     case 2: // set exp value to the poke in expgetter_id and print message
         if (gBattleControllerExecFlags == 0)
         {
+            gAttrGainPending = FALSE;
             bool32 wasSentOut = (gBattleStruct->expSentInMons & (1u << *expMonId)) != 0;
             holdEffect = GetMonHoldEffect(&gParties[B_TRAINER_PLAYER][*expMonId]);
 
@@ -4076,6 +4077,22 @@ static void Cmd_getexp(void)
     case 3: // Set stats and give exp
         if (gBattleControllerExecFlags == 0)
         {
+            if (gAttrGainPending)
+            {
+                gAttrGainPending = FALSE;
+                PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, 0, *expMonId);
+                ConvertIntToDecimalStringN(gBattleTextBuff3, gAttrGainAmount, STR_CONV_MODE_LEFT_ALIGN, 3);
+                if (gAttrGainStat != 0xFF)
+                {
+                    StringCopy(gBattleTextBuff2, GetAttrName(gAttrGainStat));
+                    PrepareStringBattle(STRINGID_ATTRGAINED, 0);
+                }
+                else
+                {
+                    PrepareStringBattle(STRINGID_ATTRPOOLGAINED, 0);
+                }
+                break; // this state runs again once the message has finished
+            }
             gBattleResources->bufferB[0][0] = 0;
             currLvl = GetMonData(&gParties[B_TRAINER_PLAYER][*expMonId], MON_DATA_LEVEL);
             if (GetMonData(&gParties[B_TRAINER_PLAYER][*expMonId], MON_DATA_HP) && currLvl != MAX_LEVEL)
