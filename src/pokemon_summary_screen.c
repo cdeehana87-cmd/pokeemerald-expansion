@@ -1,4 +1,5 @@
 #include "global.h"
+#include "attribute_points.h"
 #include "main.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -1930,12 +1931,13 @@ void ExtractMonSkillIvData(struct Pokemon *mon, struct PokeSummary *sum)
 
 void ExtractMonSkillEvData(struct Pokemon *mon, struct PokeSummary *sum)
 {
-    sum->currentHP = GetMonData(mon, MON_DATA_HP_EV);
-    sum->atk = GetMonData(mon, MON_DATA_ATK_EV);
-    sum->def = GetMonData(mon, MON_DATA_DEF_EV);
-    sum->spatk = GetMonData(mon, MON_DATA_SPATK_EV);
-    sum->spdef = GetMonData(mon, MON_DATA_SPDEF_EV);
-    sum->speed = GetMonData(mon, MON_DATA_SPEED_EV);
+    // EV view now shows attribute points
+    sum->currentHP = GetAttrPoints(mon, STAT_HP);
+    sum->atk = GetAttrPoints(mon, STAT_ATK);
+    sum->def = GetAttrPoints(mon, STAT_DEF);
+    sum->spatk = GetAttrPoints(mon, STAT_SPATK);
+    sum->spdef = GetAttrPoints(mon, STAT_SPDEF);
+    sum->speed = GetAttrPoints(mon, STAT_SPEED);
 }
 
 bool32 HasAnyRelearnableMoves(enum MoveRelearnerStates state)
