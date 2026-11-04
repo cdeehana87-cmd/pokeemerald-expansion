@@ -639,3 +639,6 @@ gSpecials::
 	def_special UpdateTrainerCardPhotoIcons
 	def_special StickerManGetBragFlags
 	def_special CheckAddCoins
+  def_special AttrPoints_PartyHasPoints
+  def_special AttrPoints_PrepareMon
+  def_special AttrPoints_Spend

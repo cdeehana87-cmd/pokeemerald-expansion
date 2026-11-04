@@ -14,7 +14,7 @@ u8 RollBattlePoints(void);                              // random 1..10
 void AwardBattlePoints(struct Pokemon *mon);            // call once per participant per knockout
 
 // PROTOTYPE ONLY: 1 = put every roll straight into one random attribute (no allocation menu yet)
-#define ATTR_PROTOTYPE_AUTOSPEND 1
+#define ATTR_PROTOTYPE_AUTOSPEND 0
 
 // Level used by the stat and damage formulas. Level no longer changes stats; only points do.
 #define ATTR_REF_LEVEL 50
@@ -32,5 +32,10 @@ extern bool8 gAttrGainPending;
 extern u8 gAttrGainStat;       // STAT_* that gained, or 0xFF if the points went to the unspent pool
 extern u16 gAttrGainAmount;
 const u8 *GetAttrName(u8 stat);
+
+// Script specials used by the Pokemon Center nurse menu.
+u16 AttrPoints_PartyHasPoints(void);
+u16 AttrPoints_PrepareMon(void);
+u16 AttrPoints_Spend(void);
 
 #endif

@@ -2,6 +2,9 @@
 #include "pokemon.h"
 #include "random.h"
 #include "attribute_points.h"
+#include "constants/battle.h"
+#include "event_data.h"
+#include "string_util.h"
 
 /*
  * Packs six attributes + unspent points into the 12 bytes normally used by
@@ -167,4 +170,47 @@ static const u8 *const sAttrNames[6] = { sAttrNameHP, sAttrNameAtk, sAttrNameDef
 const u8 *GetAttrName(u8 stat)
 {
     return sAttrNames[stat > STAT_SPDEF ? 0 : stat];
+}
+
+// ---- nurse menu specials (slot = VAR_0x8004, attribute = VAR_0x8005, amount choice = VAR_0x8006) ----
+u16 AttrPoints_PartyHasPoints(void)
+{
+    u8 i, count = CalculatePlayerPartyCount();
+    for (i = 0; i < count; i++)
+        if (GetUnspentPoints(&gParties[B_TRAINER_PLAYER][i]) != 0)
+            return TRUE;
+    return FALSE;
+}
+
+// Puts the nickname in STR_VAR_1 and the unspent points in STR_VAR_2; returns the unspent points.
+u16 AttrPoints_PrepareMon(void)
+{
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004];
+    u16 unspent = GetUnspentPoints(mon);
+    GetMonData(mon, MON_DATA_NICKNAME, gStringVar1);
+    gStringVar1[10] = 0xFF;
+    ConvertIntToDecimalStringN(gStringVar2, unspent, STR_CONV_MODE_LEFT_ALIGN, 5);
+    return unspent;
+}
+
+// Spends 1 / 5 / 10 / all points; returns the amount spent (0 = nothing happened).
+// On success STR_VAR_2 = attribute name, STR_VAR_3 = amount.
+u16 AttrPoints_Spend(void)
+{
+    static const u16 sAmounts[] = { 1, 5, 10, 65535 };
+    struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004];
+    u8 stat = gSpecialVar_0x8005;
+    u16 amount, room, unspent = GetUnspentPoints(mon);
+
+    if (stat > STAT_SPDEF)
+        return 0;
+    amount = sAmounts[gSpecialVar_0x8006 > 3 ? 0 : gSpecialVar_0x8006];
+    room = AttrCap(stat) - GetAttrPoints(mon, stat);
+    if (amount > unspent) amount = unspent;
+    if (amount > room) amount = room;
+    if (amount == 0 || !SpendAttrPoint(mon, stat, amount))
+        return 0;
+    StringCopy(gStringVar2, GetAttrName(stat));
+    ConvertIntToDecimalStringN(gStringVar3, amount, STR_CONV_MODE_LEFT_ALIGN, 5);
+    return amount;
 }
