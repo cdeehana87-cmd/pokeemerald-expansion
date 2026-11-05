@@ -4451,7 +4451,18 @@ bool32 DoesMonMeetAdditionalConditions(struct Pokemon *mon, const struct Evoluti
     return TRUE;
 }
 
+static enum Species GetEvolutionTargetSpeciesRaw(struct Pokemon *mon, enum EvolutionMode mode, u16 evolutionItem, struct Pokemon *tradePartner, bool32 *canStopEvo, enum EvoState evoState);
+
+// Obstagoon and Cursola only evolve once the National Dex is enabled (postgame).
 enum Species GetEvolutionTargetSpecies(struct Pokemon *mon, enum EvolutionMode mode, u16 evolutionItem, struct Pokemon *tradePartner, bool32 *canStopEvo, enum EvoState evoState)
+{
+    enum Species target = GetEvolutionTargetSpeciesRaw(mon, mode, evolutionItem, tradePartner, canStopEvo, evoState);
+    if ((target == SPECIES_OBSTAGOON || target == SPECIES_CURSOLA) && !IsNationalPokedexEnabled())
+        return SPECIES_NONE;
+    return target;
+}
+
+static enum Species GetEvolutionTargetSpeciesRaw(struct Pokemon *mon, enum EvolutionMode mode, u16 evolutionItem, struct Pokemon *tradePartner, bool32 *canStopEvo, enum EvoState evoState)
 {
     int i;
     enum Species targetSpecies = SPECIES_NONE;

@@ -1237,6 +1237,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         )
         .levelUpLearnset = sLinooneLevelUpLearnset,
         .teachableLearnset = sLinooneTeachableLearnset,
+        .evolutions = EVOLUTION({EVO_LEVEL, 45, SPECIES_OBSTAGOON}),
         .formSpeciesIdTable = sLinooneFormSpeciesIdTable,
     },
 
