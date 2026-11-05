@@ -11,7 +11,7 @@ MAP = 'data/maps/MossdeepCity_SpaceCenter_1F/scripts.inc'
 FLAGS = 'include/constants/flags.h'
 for p in (MAP, FLAGS):
     if not os.path.exists(p): die(f"{p} not found - run from the repo root")
-blob = "\n".join(read(p) for p in glob.glob('data/**/*.inc', recursive=True) + glob.glob('src/*.c') + glob.glob('include/**/*.h', recursive=True))
+blob = "\n".join(read(p) for p in glob.glob('data/**/*.inc', recursive=True) + glob.glob('data/**/*.s', recursive=True) + glob.glob('src/*.c') + glob.glob('include/**/*.h', recursive=True))
 needed = ['Common_EventScript_TransferredToPC::', 'Common_EventScript_NameReceivedPartyMon::', 'Common_EventScript_NameReceivedBoxMon::',
           'Common_EventScript_GetGiftMonPartySlot::', 'Common_EventScript_NoMoreRoomForPokemon::', 'gText_NicknameThisPokemon', 'MUS_OBTAIN_ITEM', 'FLAG_SYS_NATIONAL_DEX']
 missing = [n for n in needed if n not in blob]

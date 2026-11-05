@@ -90,6 +90,7 @@ MossdeepCity_SpaceCenter_1F_EventScript_Scientist::
 	lock
 	faceplayer
 	goto_if_eq VAR_MOSSDEEP_CITY_STATE, 2, MossdeepCity_SpaceCenter_1F_EventScript_ScientistMagma
+	goto_if_set FLAG_SYS_NATIONAL_DEX, MossdeepCity_SpaceCenter_1F_EventScript_JirachiCheck
 	msgbox MossdeepCity_SpaceCenter_1F_Text_RocketLaunchDemandsPerfection, MSGBOX_DEFAULT
 	release
 	end
@@ -422,3 +423,63 @@ MossdeepCity_SpaceCenter_1F_Text_MagmaIntentToStealNotice:
 	.string "We will take the fuel no matter what.\p"
 	.string "“Let there be more land!\n"
 	.string "                                          TEAM MAGMA”$"
+
+MossdeepCity_SpaceCenter_1F_EventScript_JirachiCheck::
+	goto_if_set FLAG_RECEIVED_JIRACHI, MossdeepCity_SpaceCenter_1F_EventScript_JirachiAlready
+	msgbox MossdeepCity_SpaceCenter_1F_Text_JirachiOffer, MSGBOX_DEFAULT
+	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_JIRACHI
+	givemon SPECIES_JIRACHI, 5
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, MossdeepCity_SpaceCenter_1F_EventScript_JirachiParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, MossdeepCity_SpaceCenter_1F_EventScript_JirachiPC
+	goto Common_EventScript_NoMoreRoomForPokemon
+	end
+
+MossdeepCity_SpaceCenter_1F_EventScript_JirachiParty::
+	call MossdeepCity_SpaceCenter_1F_EventScript_JirachiFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MossdeepCity_SpaceCenter_1F_EventScript_JirachiDone
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto MossdeepCity_SpaceCenter_1F_EventScript_JirachiDone
+	end
+
+MossdeepCity_SpaceCenter_1F_EventScript_JirachiPC::
+	call MossdeepCity_SpaceCenter_1F_EventScript_JirachiFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MossdeepCity_SpaceCenter_1F_EventScript_JirachiToPC
+	call Common_EventScript_NameReceivedBoxMon
+	goto MossdeepCity_SpaceCenter_1F_EventScript_JirachiToPC
+	end
+
+MossdeepCity_SpaceCenter_1F_EventScript_JirachiToPC::
+	call Common_EventScript_TransferredToPC
+	goto MossdeepCity_SpaceCenter_1F_EventScript_JirachiDone
+	end
+
+MossdeepCity_SpaceCenter_1F_EventScript_JirachiFanfare::
+	playfanfare MUS_OBTAIN_ITEM
+	message MossdeepCity_SpaceCenter_1F_Text_ReceivedJirachi
+	waitmessage
+	waitfanfare
+	return
+
+MossdeepCity_SpaceCenter_1F_EventScript_JirachiDone::
+	setflag FLAG_RECEIVED_JIRACHI
+	release
+	end
+
+MossdeepCity_SpaceCenter_1F_EventScript_JirachiAlready::
+	msgbox MossdeepCity_SpaceCenter_1F_Text_RocketLaunchDemandsPerfection, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_SpaceCenter_1F_Text_JirachiOffer:
+	.string "Ah, a TRAINER who has completed the\n"
+	.string "full POKéDEX research!\p"
+	.string "We found a small, star-shaped POKéMON\n"
+	.string "asleep inside a fallen meteorite.\p"
+	.string "It only wakes for a short while.\n"
+	.string "Please take good care of it.$"
+
+MossdeepCity_SpaceCenter_1F_Text_ReceivedJirachi:
+	.string "{PLAYER} received JIRACHI!$"
