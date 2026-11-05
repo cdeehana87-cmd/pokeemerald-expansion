@@ -3,8 +3,8 @@
 import re, os, sys, glob
 def read(p): return open(p, encoding='utf-8', errors='replace').read()
 if not os.path.isdir('data/maps') or not os.path.isdir('src'): sys.exit("STOP: run from the repo root")
-ITEMS = ['LEAF_STONE','SUN_STONE','MOON_STONE','FIRE_STONE','WATER_STONE','THUNDER_STONE','DAWN_STONE','SHINY_STONE',
-         'DUSK_STONE','ICE_STONE','DRAGON_SCALE','REAPER_CLOTH','PROTECTOR','UPGRADE','DUBIOUS_DISC','ELECTIRIZER','MAGMARIZER','METAL_COAT','KINGS_ROCK','LINKING_CORD']
+ITEMS = ['LAX_INCENSE','SEA_INCENSE','ROSE_INCENSE','PURE_INCENSE',
+         'LEAF_STONE','SUN_STONE','MOON_STONE','FIRE_STONE','WATER_STONE','THUNDER_STONE','DAWN_STONE','SHINY_STONE']
 SKIP = {'include/constants/items.h', 'src/data/items.h'}
 cats = {i: {'map pickups': 0, 'shops/prizes': 0, 'gifts/other scripts': 0, 'C data': 0, 'wild held': 0, 'frlg maps only': 0} for i in ITEMS}
 tok = {i: re.compile(r'\bITEM_' + i + r'\b') for i in ITEMS}

@@ -1,10 +1,10 @@
 Hoenn Dex species found: 212   (via FOREACH_SPECIES_IN_HOENN_DEX_ORDER macro)
 
 Hoenn Dex species with a direct source (wild/gift/static/trade): 142
-Reached only by evolving/breeding from something obtainable: 67
+Reached only by evolving/breeding from something obtainable: 69
 
-A) NOTHING GIVES THESE (family not found in wild data, gifts or trades): 3
-   OBSTAGOON, CURSOLA, JIRACHI
+A) NOTHING GIVES THESE (family not found in wild data, gifts or trades): 1
+   JIRACHI
 
 B) ONLY IN FireRed/LeafGreen map data (probably unreachable in Emerald): 0
    (none)
