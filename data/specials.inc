@@ -642,3 +642,5 @@ gSpecials::
   def_special AttrPoints_PartyHasPoints
   def_special AttrPoints_PrepareMon
   def_special AttrPoints_Spend
+  def_special GymTutor_Begin
+  def_special GymTutor_End

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "gym_tutor.h"
 #include "main.h"
 #include "battle.h"
 #include "battle_util.h"
@@ -948,6 +949,9 @@ static u32 GetRelearnerTMMoves(struct BoxPokemon *mon, u16 *moves)
 
 static u32 GetRelearnerTutorMoves(struct BoxPokemon *mon, u16 *moves)
 {
+    if (gGymTutorId != 0)
+        return GymTutor_GetMoves(mon, moves);
+
     enum Species species = GetBoxMonData(mon, MON_DATA_SPECIES);
     u32 numMoves = 0;
 
@@ -1106,5 +1110,5 @@ static bool32 IsTMMoveRelearnerActive(void)
 
 static bool32 IsTutorMoveRelearnerActive(void)
 {
-    return (FlagGet(P_FLAG_TUTOR_MOVES) || P_ENABLE_MOVE_RELEARNERS);
+    return (gGymTutorId != 0 || FlagGet(P_FLAG_TUTOR_MOVES) || P_ENABLE_MOVE_RELEARNERS);
 }

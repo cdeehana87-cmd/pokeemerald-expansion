@@ -63,7 +63,7 @@ RustboroCity_Gym_EventScript_GymGuide::
 
 RustboroCity_Gym_EventScript_GymGuidePostVictory::
 	msgbox RustboroCity_Gym_Text_GymGuidePostVictory, MSGBOX_DEFAULT
-	release
+	goto RustboroCity_Gym_EventScript_RockTutorOffer
 	end
 
 RustboroCity_Gym_EventScript_LeftGymStatue::
@@ -281,3 +281,57 @@ RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons:
 	.string "You only have one POKéMON with you?\p"
 	.string "Please return with at least one more\n"
 	.string "POKéMON.$"
+
+RustboroCity_Gym_EventScript_RockTutorOffer::
+	msgbox RustboroCity_Gym_EventScript_RockTutor_Text_Offer, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, RustboroCity_Gym_EventScript_RockTutorEnd
+	setvar VAR_0x8004, 1
+	special GymTutor_Begin
+	goto RustboroCity_Gym_EventScript_RockTutorChooseMon
+
+RustboroCity_Gym_EventScript_RockTutorChooseMon::
+	msgbox RustboroCity_Gym_EventScript_RockTutor_Text_WhichMon, MSGBOX_DEFAULT
+	special ChooseMonForMoveRelearner
+	goto_if_ge VAR_0x8004, PARTY_SIZE, RustboroCity_Gym_EventScript_RockTutorEnd
+	special IsSelectedMonEgg
+	goto_if_eq VAR_RESULT, TRUE, RustboroCity_Gym_EventScript_RockTutorCantEgg
+	goto_if_eq VAR_0x8005, 0, RustboroCity_Gym_EventScript_RockTutorNoMoves
+	goto RustboroCity_Gym_EventScript_RockTutorChooseMove
+
+RustboroCity_Gym_EventScript_RockTutorChooseMove::
+	msgbox RustboroCity_Gym_EventScript_RockTutor_Text_WhichMove, MSGBOX_DEFAULT
+	special TeachMoveRelearnerMove
+	goto_if_eq VAR_0x8004, 0, RustboroCity_Gym_EventScript_RockTutorChooseMon
+	goto RustboroCity_Gym_EventScript_RockTutorEnd
+
+RustboroCity_Gym_EventScript_RockTutorNoMoves::
+	msgbox RustboroCity_Gym_EventScript_RockTutor_Text_NoMoves, MSGBOX_DEFAULT
+	goto RustboroCity_Gym_EventScript_RockTutorChooseMon
+
+RustboroCity_Gym_EventScript_RockTutorCantEgg::
+	msgbox RustboroCity_Gym_EventScript_RockTutor_Text_CantEgg, MSGBOX_DEFAULT
+	goto RustboroCity_Gym_EventScript_RockTutorChooseMon
+
+RustboroCity_Gym_EventScript_RockTutorEnd::
+	special GymTutor_End
+	release
+	end
+
+RustboroCity_Gym_EventScript_RockTutor_Text_Offer:
+	.string "I can teach ROCK-type moves to your\n"
+	.string "POKéMON now that you beat ROXANNE.\p"
+	.string "A POKéMON must be strong enough and\n"
+	.string "able to learn the move. Interested?$"
+
+RustboroCity_Gym_EventScript_RockTutor_Text_WhichMon:
+	.string "Which POKéMON should I teach?$"
+
+RustboroCity_Gym_EventScript_RockTutor_Text_WhichMove:
+	.string "Which move should I teach?$"
+
+RustboroCity_Gym_EventScript_RockTutor_Text_NoMoves:
+	.string "That POKéMON has no ROCK move it can\n"
+	.string "learn right now.$"
+
+RustboroCity_Gym_EventScript_RockTutor_Text_CantEgg:
+	.string "An EGG can't learn any moves.$"
