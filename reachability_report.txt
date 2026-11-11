@@ -17,4 +17,8 @@ D) Hoenn Dex evolutions that need an ITEM (check you can get the item): 14
    MAGNETON+THUNDER_STONE, NOSEPASS+THUNDER_STONE, NUZLEAF+LEAF_STONE, PIKACHU+THUNDER_STONE, ROSELIA+SHINY_STONE
    SKITTY+MOON_STONE, SNORUNT+DAWN_STONE, STARYU+WATER_STONE, VULPIX+FIRE_STONE
 
+E) CHOOSE-ONE GROUPS (the totals above count these as reachable, but a normal game only gives ONE per group):
+   Starters: TREECKO, TORCHIC, MUDKIP   | found in wild/script data: TREECKO, TORCHIC, MUDKIP
+   Fossils: LILEEP, ANORITH   | found in wild/script data: LILEEP, ANORITH
+
 Notes: legendaries, event Pokemon and anything coded in C (roamers, some gifts) can show up in A falsely. Review the list, don't trust it blindly.

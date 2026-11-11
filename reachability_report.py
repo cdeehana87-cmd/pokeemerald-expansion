@@ -103,7 +103,7 @@ for p in glob.glob('data/**/*.inc', recursive=True):
 trade_p = 'src/data/trade.h'
 if os.path.exists(trade_p):
     for m in re.finditer(r'\.species\s*=\s*SPECIES_([A-Z0-9_]+)', read(trade_p)): script_src.add(m.group(1))
-known_c = {'TREECKO', 'TORCHIC', 'MUDKIP', 'LILEEP', 'ANORITH'}   # starters and fossils are coded in C
+known_c = {'TREECKO', 'TORCHIC', 'MUDKIP', 'LILEEP', 'ANORITH'}   # starters and fossils are coded in C: only ONE of each group is really given (see section E)
 
 direct = wild | script_src | known_c
 direct_frlg = wild_frlg | script_frlg
@@ -132,6 +132,12 @@ wrap(tl) if tl else say("   (none)")
 ie = sorted({f"{a}+{i.replace('ITEM_','')}" for a, i, b in item_evos if a in hoenn or b in hoenn})
 say(f"\nD) Hoenn Dex evolutions that need an ITEM (check you can get the item): {len(ie)}")
 wrap(ie) if ie else say("   (none)")
+STARTERS = ['TREECKO', 'TORCHIC', 'MUDKIP']
+FOSSILS = ['LILEEP', 'ANORITH']
+say("\nE) CHOOSE-ONE GROUPS (the totals above count these as reachable, but a normal game only gives ONE per group):")
+for label, grp in (("Starters", STARTERS), ("Fossils", FOSSILS)):
+    given = [n for n in grp if n in (wild | script_src)]
+    say(f"   {label}: {', '.join(grp)}   | found in wild/script data: {', '.join(given) if given else 'none (coded in C, so one choice only)'}")
 say("\nNotes: legendaries, event Pokemon and anything coded in C (roamers, some gifts) can show up in A falsely. Review the list, don't trust it blindly.")
 open('reachability_report.txt', 'w').write("\n".join(out) + "\n")
 print("\n(saved as reachability_report.txt)")
