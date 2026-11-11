@@ -1658,6 +1658,9 @@ void GiveBoxMonDefaultMove(struct BoxPokemon *boxMon, u32 slot)
 
 enum Move MonTryLearningNewMoveAtLevel(struct Pokemon *mon, bool32 firstMove, u32 level)
 {
+#if !ATTR_LEVELUP_LEARNING
+    return MOVE_NONE; // moves now come from TMs and gym posts
+#endif
     enum Move retVal = MOVE_NONE;
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
     const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);

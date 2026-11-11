@@ -38,4 +38,7 @@ u16 AttrPoints_PartyHasPoints(void);
 u16 AttrPoints_PrepareMon(void);
 u16 AttrPoints_Spend(void);
 
+// 0 = leveling up (battle, Rare Candy, daycare) teaches no moves. Moves come from TMs and the gym posts.
+#define ATTR_LEVELUP_LEARNING 0
+
 #endif
